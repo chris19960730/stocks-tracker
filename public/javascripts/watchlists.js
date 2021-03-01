@@ -14,7 +14,10 @@ const insertStockIntoPage = async () => {
   const res = await fetch('/stocks?ticker=' + ticker);
 
   const stockInfo = await res.json();
-  stockToDatbase = stockInfo;
+  stockToDatbase = {
+    ...stockInfo,
+    logo: stockInfo.logo.url,
+  };
   // create card in the page
   const card = document.createElement('div');
   card.className = 'card';

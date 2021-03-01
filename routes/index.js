@@ -90,7 +90,12 @@ router.get('/stocks', requireLogin, async (req, res) => {
 router.post('/myStocks', requireLogin, async (req, res) => {
   console.log(req.session.user_id);
   console.log(req.body);
-  // console.log(req);
+  const stock = req.body;
+  try {
+    await stockTracker.addStock(req.session.user_id, stock);
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 module.exports = router;
