@@ -37,7 +37,7 @@ router.get('/register', (req, res) => {
   res.redirect('/register.html');
 });
 
-router.get('/watchlists', requireLogin, (req, res) => {
+router.get('/watchlists', requireLogin, async (req, res) => {
   res.redirect('/watchlists.html');
 });
 
@@ -76,6 +76,7 @@ router.get('/stocks', requireLogin, async (req, res) => {
   const { high, low } = await stock.previous();
   const company = await stock.company();
   stockInfo = {
+    ticker: ticker,
     logo: logo,
     high_price: high,
     low_price: low,
@@ -93,6 +94,17 @@ router.post('/myStocks', requireLogin, async (req, res) => {
   const stock = req.body;
   try {
     await stockTracker.addStock(req.session.user_id, stock);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+router.get('/myStocks', requireLogin, async (req, res) => {
+  console.log(req.session.user_id);
+  try {
+    const stocks = await stockTracker.getCurrentUserSotcks(req.session.user_id);
+    console.log(stocks);
+    res.json(stocks);
   } catch (err) {
     res.send(err);
   }

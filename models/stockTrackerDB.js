@@ -36,6 +36,7 @@ module.exports = {
     const stocks = db.collection('stocks');
     const x = await stocks.insertOne({
       user_id: user_id,
+      ticker: stock.ticker,
       logo: stock.logo,
       high_price: stock.high_price,
       low_price: stock.low_price,
@@ -44,5 +45,20 @@ module.exports = {
       CEO: stock.CEO,
     });
     client.close();
+  },
+
+  getCurrentUserSotcks: async (user_id) => {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db('stockTracker');
+    const stocks = db.collection('stocks');
+    const currentUserStocks = await stocks
+      .find({
+        user_id: user_id,
+      })
+      .toArray();
+
+    client.close();
+    return currentUserStocks;
   },
 };

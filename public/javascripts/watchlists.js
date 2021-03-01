@@ -7,14 +7,14 @@
 //   return stockInfo;
 // };
 
-let stockToDatbase = null;
+let stockToDatabase = null;
 const insertStockIntoPage = async () => {
   const ticker = document.querySelector('#ticker').value;
   console.log(ticker);
   const res = await fetch('/stocks?ticker=' + ticker);
 
   const stockInfo = await res.json();
-  stockToDatbase = {
+  stockToDatabase = {
     ...stockInfo,
     logo: stockInfo.logo.url,
   };
@@ -64,13 +64,13 @@ const searchBtn = document.querySelector('#searchBtn');
 searchBtn.addEventListener('click', insertStockIntoPage);
 
 const postData = async () => {
-  if (stockToDatbase) {
+  if (stockToDatabase) {
     fetch('/myStocks', {
-      method: 'POST', // or 'PUT'
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(stockToDatbase),
+      body: JSON.stringify(stockToDatabase),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -83,6 +83,74 @@ const postData = async () => {
   }
 };
 
+const getCurrentUserSotcks = async () => {
+  const res = await fetch('/myStocks');
+  const data = await res.json();
+  //   console.log(data);
+  return data;
+};
+
+const showUserStocks = async () => {
+  const stocks = await getCurrentUserSotcks();
+  console.log(stocks);
+  if (!stocks || stocks.length === 0) {
+    return;
+  }
+  const myStockList = document.querySelector('#myStockList');
+  const thead = document.createElement('thead');
+  const tr = document.createElement('tr');
+  const colName = [
+    'Ticker',
+    'Logo',
+    'Company Name',
+    'High Price',
+    'Low Price',
+    'Actions',
+  ];
+  for (let i = 0; i < 6; i++) {
+    const th = document.createElement('th');
+    th.setAttribute('scope', 'col');
+    th.appendChild(document.createTextNode(colName[i]));
+    tr.appendChild(th);
+  }
+  thead.appendChild(tr);
+  myStockList.appendChild(thead);
+  const tbody = document.createElement('tbody');
+  stocks.forEach((stock) => {
+    const row = document.createElement('tr');
+    const th = document.createElement('th');
+    th.setAttribute('scope', 'row');
+    th.appendChild(document.createTextNode(stock.ticker));
+    const td1 = document.createElement('td');
+    td1.className = 'w-25';
+    const image = document.createElement('img');
+    image.className = 'img-fluid img-thumbnail';
+    image.src = stock.logo;
+    td1.appendChild(image);
+    const td2 = document.createElement('td');
+    td2.appendChild(document.createTextNode(stock.companyName));
+    const td3 = document.createElement('td');
+    td3.appendChild(document.createTextNode(stock.high_price));
+    const td4 = document.createElement('td');
+    td4.appendChild(document.createTextNode(stock.low_price));
+    const td5 = document.createElement('td');
+    const a = document.createElement('a');
+    a.className = 'btn btn-outline-primary';
+    a.href = stock.website;
+    a.appendChild(document.createTextNode('check out homePage'));
+    td5.appendChild(a);
+    row.appendChild(th);
+    row.appendChild(td1);
+    row.appendChild(td2);
+    row.appendChild(td3);
+    row.appendChild(td4);
+    row.appendChild(td5);
+    tbody.appendChild(row);
+  });
+  myStockList.appendChild(tbody);
+};
+
 window.onload = () => {
   console.log('reloaded!');
+  showUserStocks();
 };
