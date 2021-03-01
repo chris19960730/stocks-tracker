@@ -79,5 +79,10 @@ const postData = async () => {
       .catch((error) => {
         console.error('Error:', error);
       });
+    window.location = '/watchlists';
   }
+};
+
+window.onload = () => {
+  console.log('reloaded!');
 };
