@@ -12,16 +12,13 @@ const iex = new IEXCloudClient(fetch, {
   publishable: 'sk_15302993e1aa43c1b7e47474783d657d',
   version: 'stable',
 });
-let logo = '';
-iex
-  .symbol('snow')
-  .logo()
-  .then((res) => {
-    logo = res.url;
-  });
-router.get('/test', function (req, res) {
-  res.send(logo);
-});
+
+const requireLogin = (req, res, next) => {
+  if (!req.session.user_id) {
+    return res.redirect('/login');
+  }
+  next();
+};
 
 router.post('/register', async (req, res) => {
   const user = req.body;
@@ -31,7 +28,7 @@ router.post('/register', async (req, res) => {
     password: hash,
   };
   const userId = await stockTracker.addUser(new_user);
-  console.log(userId);
+  // console.log(userId);
   req.session.user_id = userId;
   res.redirect('/watchlists');
 });
@@ -40,10 +37,7 @@ router.get('/register', (req, res) => {
   res.redirect('/register.html');
 });
 
-router.get('/watchlists', (req, res) => {
-  if (!req.session.user_id) {
-    return res.redirect('/login');
-  }
+router.get('/watchlists', requireLogin, (req, res) => {
   res.redirect('/watchlists.html');
 });
 
@@ -68,14 +62,35 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', (req, res) => {
+  req.session.user_id = null;
   req.session.destroy();
   res.redirect('/login');
 });
 
-router.post('/123', function (req, res) {
+router.get('/stocks', requireLogin, async (req, res) => {
+  const { ticker } = req.query;
+  // console.log(ticker);
+  // console.log(req.query);
+  const stock = await iex.symbol(ticker);
+  const logo = await stock.logo();
+  const { high, low } = await stock.previous();
+  const company = await stock.company();
+  stockInfo = {
+    logo: logo,
+    high_price: high,
+    low_price: low,
+    companyName: company.companyName,
+    website: company.website,
+    CEO: company.CEO,
+  };
+  // console.log(stockInfo);
+  res.send(stockInfo);
+});
+
+router.post('/myStocks', requireLogin, async (req, res) => {
+  console.log(req.session.user_id);
   console.log(req.body);
-  res.json(req.body);
-  res.redirect('/');
+  // console.log(req);
 });
 
 module.exports = router;

@@ -28,4 +28,19 @@ module.exports = {
     client.close();
     return userFound;
   },
+
+  // addStock: async (user_id, stock) => {
+  //   const client = new MongoClient(url, { useUnifiedTopology: true });
+  //   await client.connect();
+  //   const db = client.db('stockTracker');
+  //   const stocks = db.collection('stocks');
+  //   const x = await stocks.insertOne({
+  //     user_id: user_id,
+  //     logo: stock.,
+  //     email: user.email,
+  //     password: user.password,
+  //   });
+  //   client.close();
+  //   return x.insertedId;
+  // },
 };
