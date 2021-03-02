@@ -9,7 +9,7 @@
 
 let stockToDatabase = null;
 const insertStockIntoPage = async () => {
-  const ticker = document.querySelector('#ticker').value;
+  const ticker = document.querySelector('#ticker').value.toUpperCase();
   console.log(ticker);
   const res = await fetch('/stocks?ticker=' + ticker);
 
@@ -18,13 +18,14 @@ const insertStockIntoPage = async () => {
     ...stockInfo,
     logo: stockInfo.logo.url,
   };
+
   // create card in the page
   const card = document.createElement('div');
   card.className = 'card';
   const image = document.createElement('img');
   image.src = stockInfo.logo.url;
   image.className = 'card-img-top';
-  image.style.width = '18rem';
+  image.style.width = '12rem';
   card.appendChild(image);
 
   const cardBody = document.createElement('div');
@@ -49,15 +50,32 @@ const insertStockIntoPage = async () => {
 
   const stockResult = document.getElementById('stockResult');
   stockResult.parentNode.insertBefore(card, stockResult);
-  const form = document.createElement('form');
-  form.setAttribute('method', 'post');
-  form.setAttribute('action', '/myStocks');
-  const addBtn = document.createElement('button');
-  addBtn.className = 'btn btn-outline-primary';
-  addBtn.setAttribute('id', 'addBtn');
-  addBtn.appendChild(document.createTextNode('Add to watchlist'));
-  stockResult.parentNode.insertBefore(addBtn, stockResult);
-  addBtn.addEventListener('click', postData);
+
+  // if stock already in watchlist, can't add to lists
+  const stocks = await getCurrentUserSotcks();
+  let alreadyTracked = false;
+  stocks.find((stock) => {
+    if (stock.ticker === ticker) {
+      alreadyTracked = true;
+    }
+  });
+
+  if (alreadyTracked) {
+    const span = document.createElement('span');
+    span.className = 'badge bg-warning text-dark';
+    span.appendChild(
+      document.createTextNode('You have already been tracking this stock')
+    );
+    stockResult.parentNode.insertBefore(span, stockResult);
+  } else {
+    // add to watchlist button
+    const addBtn = document.createElement('button');
+    addBtn.className = 'btn btn-outline-primary';
+    addBtn.setAttribute('id', 'addBtn');
+    addBtn.appendChild(document.createTextNode('Add to watchlist'));
+    stockResult.parentNode.insertBefore(addBtn, stockResult);
+    addBtn.addEventListener('click', postData);
+  }
 };
 
 const searchBtn = document.querySelector('#searchBtn');
@@ -149,6 +167,15 @@ const showUserStocks = async () => {
   });
   myStockList.appendChild(tbody);
 };
+
+// hacky way, to refresh page after searching
+// const tickerInput = document.querySelector('#ticker');
+// const clearSearchResult = () => {
+//   if (tickerInput.value) {
+//     window.location = '/watchlists';
+//   }
+// };
+// tickerInput.addEventListener('focus', clearSearchResult);
 
 window.onload = () => {
   console.log('reloaded!');
