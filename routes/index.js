@@ -20,6 +20,10 @@ const requireLogin = (req, res, next) => {
   next();
 };
 
+router.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
 router.post('/register', async (req, res) => {
   const user = req.body;
   const hash = await bcrypt.hash(user.password, 10);
