@@ -89,11 +89,12 @@ router.get('/stocks', requireLogin, async (req, res) => {
 });
 
 router.post('/myStocks', requireLogin, async (req, res) => {
-  console.log(req.session.user_id);
-  console.log(req.body);
+  // console.log(req.session.user_id);
+  // console.log(req.body);
   const stock = req.body;
   try {
     await stockTracker.addStock(req.session.user_id, stock);
+    res.send('added successfully');
   } catch (err) {
     res.send(err);
   }
@@ -102,11 +103,26 @@ router.post('/myStocks', requireLogin, async (req, res) => {
 router.get('/myStocks', requireLogin, async (req, res) => {
   console.log(req.session.user_id);
   try {
-    const stocks = await stockTracker.getCurrentUserSotcks(req.session.user_id);
-    console.log(stocks);
+    const stocks = await stockTracker.getCurrentUserStocks(req.session.user_id);
+    // console.log(stocks);
     res.json(stocks);
   } catch (err) {
     res.send(err);
+  }
+});
+
+router.delete('/myStocks', requireLogin, async (req, res) => {
+  // console.log(req.body);
+  const { ticker } = req.body;
+  try {
+    const deletedStock = await stockTracker.removeStock(
+      req.session.user_id,
+      ticker
+    );
+    console.log(deletedStock);
+    res.status(200).send('Deleted successfully');
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 

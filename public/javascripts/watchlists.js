@@ -42,7 +42,7 @@ const insertStockIntoPage = async () => {
   resultDiv.appendChild(card);
 
   // if stock already in watchlist, can't add to lists
-  const stocks = await getCurrentUserSotcks();
+  const stocks = await getCurrentUserStocks();
   let alreadyTracked = false;
   stocks.find((stock) => {
     if (stock.ticker === ticker) {
@@ -52,7 +52,7 @@ const insertStockIntoPage = async () => {
 
   if (alreadyTracked) {
     const span = document.createElement('span');
-    span.className = 'badge bg-warning text-dark';
+    span.className = 'badge bg-warning text-dark mt-3';
     span.appendChild(
       document.createTextNode('You have already been tracking this stock')
     );
@@ -64,7 +64,7 @@ const insertStockIntoPage = async () => {
     addBtn.setAttribute('id', 'addBtn');
     addBtn.appendChild(document.createTextNode('Add to watchlist'));
     resultDiv.appendChild(addBtn);
-    addBtn.addEventListener('click', postData);
+    addBtn.addEventListener('click', addStock);
   }
   const oldDiv = document.getElementById('stockResult');
   document.getElementById('result').replaceChild(resultDiv, oldDiv);
@@ -73,7 +73,7 @@ const insertStockIntoPage = async () => {
 const searchBtn = document.querySelector('#searchBtn');
 searchBtn.addEventListener('click', insertStockIntoPage);
 
-const postData = async () => {
+const addStock = async () => {
   if (stockToDatabase) {
     fetch('/myStocks', {
       method: 'POST',
@@ -82,10 +82,7 @@ const postData = async () => {
       },
       body: JSON.stringify(stockToDatabase),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Success:', data);
-      })
+      .then(console.log('Success'))
       .catch((error) => {
         console.error('Error:', error);
       });
@@ -93,7 +90,7 @@ const postData = async () => {
   }
 };
 
-const getCurrentUserSotcks = async () => {
+const getCurrentUserStocks = async () => {
   const res = await fetch('/myStocks');
   const data = await res.json();
   //   console.log(data);
@@ -101,7 +98,7 @@ const getCurrentUserSotcks = async () => {
 };
 
 const showUserStocks = async () => {
-  const stocks = await getCurrentUserSotcks();
+  const stocks = await getCurrentUserStocks();
   console.log(stocks);
   if (!stocks || stocks.length === 0) {
     return;
@@ -136,6 +133,8 @@ const showUserStocks = async () => {
     const image = document.createElement('img');
     image.className = 'img-fluid img-thumbnail';
     image.src = stock.logo;
+    image.style.maxHeight = '138px';
+    image.style.maxWidth = '138px';
     td1.appendChild(image);
     const td2 = document.createElement('td');
     td2.appendChild(document.createTextNode(stock.companyName));
@@ -158,6 +157,63 @@ const showUserStocks = async () => {
     tbody.appendChild(row);
   });
   myStockList.appendChild(tbody);
+  addRemoveInputElement();
+};
+
+const addRemoveInputElement = async () => {
+  //   <select class="form-select" aria-label="Default select example">
+  //     <option selected>Open this select menu</option>
+  //     <option value="1">One</option>
+  //     <option value="2">Two</option>
+  //     <option value="3">Three</option>
+  //   </select>;
+  //   <button type="button" class="btn btn-outline-danger">
+  //     Danger
+  //   </button>;
+  const select = document.createElement('select');
+  select.className = 'form-select';
+  select.setAttribute('id', 'selectInput');
+  const stocks = await getCurrentUserStocks();
+  const option = document.createElement('option');
+  option.setAttribute('selected', true);
+  option.value = '';
+  option.appendChild(
+    document.createTextNode('Select a stock to remove from your watchlist')
+  );
+  select.appendChild(option);
+
+  stocks.forEach((stock) => {
+    const option = document.createElement('option');
+    option.value = stock.ticker;
+    option.appendChild(document.createTextNode(stock.ticker));
+    select.appendChild(option);
+  });
+
+  const submitBtn = document.createElement('button');
+  submitBtn.className = 'btn btn-outline-danger';
+  submitBtn.appendChild(document.createTextNode('Remove'));
+  submitBtn.addEventListener('click', deleteStock);
+  document.querySelector('#removeInput').appendChild(select);
+  document.querySelector('#removeInput').appendChild(submitBtn);
+  console.log(document.querySelector('#selectInput').value);
+};
+
+const deleteStock = async () => {
+  const ticker = document.querySelector('#selectInput').value.toUpperCase();
+  if (!ticker) {
+    return;
+  }
+  fetch('/myStocks', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ticker: ticker }),
+  })
+    .then((window.location = '/watchlists'))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 };
 
 // hacky way, to refresh page after searching

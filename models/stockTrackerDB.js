@@ -47,7 +47,7 @@ module.exports = {
     client.close();
   },
 
-  getCurrentUserSotcks: async (user_id) => {
+  getCurrentUserStocks: async (user_id) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
     await client.connect();
     const db = client.db('stockTracker');
@@ -60,5 +60,18 @@ module.exports = {
 
     client.close();
     return currentUserStocks;
+  },
+  removeStock: async (user_id, ticker) => {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+    await client.connect();
+    const db = client.db('stockTracker');
+    const stocks = db.collection('stocks');
+    const x = await stocks.deleteOne({
+      user_id: user_id,
+      ticker: ticker,
+    });
+
+    client.close();
+    return x;
   },
 };
