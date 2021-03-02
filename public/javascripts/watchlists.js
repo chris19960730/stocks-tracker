@@ -1,73 +1,83 @@
 let stockToDatabase = null;
 const insertStockIntoPage = async () => {
-  const ticker = document.querySelector('#ticker').value.toUpperCase();
-  console.log(ticker);
-  const res = await fetch('/stocks?ticker=' + ticker);
-
-  const stockInfo = await res.json();
-  stockToDatabase = {
-    ...stockInfo,
-    logo: stockInfo.logo.url,
-  };
   const resultDiv = document.createElement('div');
   resultDiv.setAttribute('id', 'stockResult');
-  // create card in the page
-  const card = document.createElement('div');
-  card.className = 'card';
-  const image = document.createElement('img');
-  image.src = stockInfo.logo.url;
-  image.className = 'card-img-top';
-  image.style.width = '12rem';
-  card.appendChild(image);
+  const ticker = document.querySelector('#ticker').value.toUpperCase();
+  // console.log(ticker);
+  const res = await fetch('/stocks?ticker=' + ticker);
+  if (res.status === 200) {
+    const stockInfo = await res.json();
 
-  const cardBody = document.createElement('div');
-  const cardTitle = document.createElement('h5');
-  cardTitle.className = 'card-title';
-  const titleCotent = document.createTextNode(ticker);
-  cardTitle.appendChild(titleCotent);
-  cardBody.appendChild(cardTitle);
-  card.appendChild(cardBody);
-  const infoList = document.createElement('ul');
-  infoList.classList = 'list-group list-group-flush';
-  for (const key in stockInfo) {
-    if (key != 'logo') {
-      const li = document.createElement('li');
-      li.className = 'list-group-item';
-      const content = document.createTextNode(key + ': ' + stockInfo[key]);
-      li.appendChild(content);
-      infoList.appendChild(li);
+    stockToDatabase = {
+      ...stockInfo,
+      logo: stockInfo.logo.url,
+    };
+
+    // create card in the page
+    const card = document.createElement('div');
+    card.className = 'card';
+    const image = document.createElement('img');
+    image.src = stockInfo.logo.url;
+    image.className = 'card-img-top';
+    image.style.width = '12rem';
+    card.appendChild(image);
+
+    const cardBody = document.createElement('div');
+    const cardTitle = document.createElement('h5');
+    cardTitle.className = 'card-title';
+    const titleCotent = document.createTextNode(ticker);
+    cardTitle.appendChild(titleCotent);
+    cardBody.appendChild(cardTitle);
+    card.appendChild(cardBody);
+    const infoList = document.createElement('ul');
+    infoList.classList = 'list-group list-group-flush';
+    for (const key in stockInfo) {
+      if (key != 'logo') {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        const content = document.createTextNode(key + ': ' + stockInfo[key]);
+        li.appendChild(content);
+        infoList.appendChild(li);
+      }
     }
-  }
-  card.appendChild(infoList);
-  resultDiv.appendChild(card);
+    card.appendChild(infoList);
+    resultDiv.appendChild(card);
 
-  // if stock already in watchlist, can't add to lists
-  const stocks = await getCurrentUserStocks();
-  let alreadyTracked = false;
-  stocks.find((stock) => {
-    if (stock.ticker === ticker) {
-      alreadyTracked = true;
+    // if stock already in watchlist, can't add to lists
+    const stocks = await getCurrentUserStocks();
+    let alreadyTracked = false;
+    stocks.find((stock) => {
+      if (stock.ticker === ticker) {
+        alreadyTracked = true;
+      }
+    });
+
+    if (alreadyTracked) {
+      const span = document.createElement('span');
+      span.className = 'badge bg-warning text-dark mt-3';
+      span.appendChild(
+        document.createTextNode('You have already been tracking this stock')
+      );
+      resultDiv.appendChild(span);
+    } else {
+      // add to watchlist button
+      const addBtn = document.createElement('button');
+      addBtn.className = 'btn btn-outline-primary';
+      addBtn.setAttribute('id', 'addBtn');
+      addBtn.appendChild(document.createTextNode('Add to watchlist'));
+      resultDiv.appendChild(addBtn);
+      addBtn.addEventListener('click', addStock);
     }
-  });
-
-  if (alreadyTracked) {
-    const span = document.createElement('span');
-    span.className = 'badge bg-warning text-dark mt-3';
-    span.appendChild(
-      document.createTextNode('You have already been tracking this stock')
-    );
-    resultDiv.appendChild(span);
+    const oldDiv = document.getElementById('stockResult');
+    document.getElementById('result').replaceChild(resultDiv, oldDiv);
   } else {
-    // add to watchlist button
-    const addBtn = document.createElement('button');
-    addBtn.className = 'btn btn-outline-primary';
-    addBtn.setAttribute('id', 'addBtn');
-    addBtn.appendChild(document.createTextNode('Add to watchlist'));
-    resultDiv.appendChild(addBtn);
-    addBtn.addEventListener('click', addStock);
+    const alertContainer = document.querySelector('#alertContainer');
+    message = 'No data founded for this ticker symbol, double-check you input!';
+    alertContainer.innerHTML =
+      '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>' +
+      message +
+      '</strong> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
   }
-  const oldDiv = document.getElementById('stockResult');
-  document.getElementById('result').replaceChild(resultDiv, oldDiv);
 };
 
 const searchBtn = document.querySelector('#searchBtn');
@@ -161,15 +171,6 @@ const showUserStocks = async () => {
 };
 
 const addRemoveInputElement = async () => {
-  //   <select class="form-select" aria-label="Default select example">
-  //     <option selected>Open this select menu</option>
-  //     <option value="1">One</option>
-  //     <option value="2">Two</option>
-  //     <option value="3">Three</option>
-  //   </select>;
-  //   <button type="button" class="btn btn-outline-danger">
-  //     Danger
-  //   </button>;
   const select = document.createElement('select');
   select.className = 'form-select';
   select.setAttribute('id', 'selectInput');
@@ -189,12 +190,20 @@ const addRemoveInputElement = async () => {
     select.appendChild(option);
   });
 
-  const submitBtn = document.createElement('button');
-  submitBtn.className = 'btn btn-outline-danger';
-  submitBtn.appendChild(document.createTextNode('Remove'));
-  submitBtn.addEventListener('click', deleteStock);
+  // const submitBtn = document.createElement('button');
+  // submitBtn.className = 'btn btn-outline-danger';
+  // submitBtn.appendChild(document.createTextNode('Remove'));
+  // submitBtn.addEventListener('click', deleteStock);
   document.querySelector('#removeInput').appendChild(select);
-  document.querySelector('#removeInput').appendChild(submitBtn);
+  // document.querySelector('#deleteBtnRow').appendChild(submitBtn);
+
+  const deleteBtnRow = document.querySelector('#deleteBtnRow');
+  deleteBtnRow.innerHTML =
+    '<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >' +
+    'Remove' +
+    '</button>';
+  const modalConfirmBtn = document.querySelector('#yes');
+  modalConfirmBtn.addEventListener('click', deleteStock);
   console.log(document.querySelector('#selectInput').value);
 };
 

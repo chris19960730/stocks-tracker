@@ -71,21 +71,27 @@ router.get('/stocks', requireLogin, async (req, res) => {
   const { ticker } = req.query;
   // console.log(ticker);
   // console.log(req.query);
+
   const stock = await iex.symbol(ticker);
+
   const logo = await stock.logo();
   const { high, low } = await stock.previous();
   const company = await stock.company();
-  stockInfo = {
-    ticker: ticker,
-    logo: logo,
-    high_price: high,
-    low_price: low,
-    companyName: company.companyName,
-    website: company.website,
-    CEO: company.CEO,
-  };
-  // console.log(stockInfo);
-  res.send(stockInfo);
+  if (logo && high && low) {
+    stockInfo = {
+      ticker: ticker,
+      logo: logo,
+      high_price: high,
+      low_price: low,
+      companyName: company.companyName,
+      website: company.website,
+      CEO: company.CEO,
+    };
+    // console.log(stockInfo);
+    res.send(stockInfo);
+  } else {
+    res.status('500').send({ err: 'Something went wrong' });
+  }
 });
 
 router.post('/myStocks', requireLogin, async (req, res) => {
