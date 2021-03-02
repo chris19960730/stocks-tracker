@@ -1,12 +1,3 @@
-// const getStockInfo = async () => {
-//   const ticker = document.querySelector('#ticker').value;
-//   console.log(ticker);
-//   const res = await fetch('/stocks?ticker=' + ticker);
-
-//   const stockInfo = await res.json();
-//   return stockInfo;
-// };
-
 let stockToDatabase = null;
 const insertStockIntoPage = async () => {
   const ticker = document.querySelector('#ticker').value.toUpperCase();
@@ -18,7 +9,8 @@ const insertStockIntoPage = async () => {
     ...stockInfo,
     logo: stockInfo.logo.url,
   };
-
+  const resultDiv = document.createElement('div');
+  resultDiv.setAttribute('id', 'stockResult');
   // create card in the page
   const card = document.createElement('div');
   card.className = 'card';
@@ -47,9 +39,7 @@ const insertStockIntoPage = async () => {
     }
   }
   card.appendChild(infoList);
-
-  const stockResult = document.getElementById('stockResult');
-  stockResult.parentNode.insertBefore(card, stockResult);
+  resultDiv.appendChild(card);
 
   // if stock already in watchlist, can't add to lists
   const stocks = await getCurrentUserSotcks();
@@ -66,16 +56,18 @@ const insertStockIntoPage = async () => {
     span.appendChild(
       document.createTextNode('You have already been tracking this stock')
     );
-    stockResult.parentNode.insertBefore(span, stockResult);
+    resultDiv.appendChild(span);
   } else {
     // add to watchlist button
     const addBtn = document.createElement('button');
     addBtn.className = 'btn btn-outline-primary';
     addBtn.setAttribute('id', 'addBtn');
     addBtn.appendChild(document.createTextNode('Add to watchlist'));
-    stockResult.parentNode.insertBefore(addBtn, stockResult);
+    resultDiv.appendChild(addBtn);
     addBtn.addEventListener('click', postData);
   }
+  const oldDiv = document.getElementById('stockResult');
+  document.getElementById('result').replaceChild(resultDiv, oldDiv);
 };
 
 const searchBtn = document.querySelector('#searchBtn');
