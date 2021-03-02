@@ -7,58 +7,124 @@
       integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
       crossorigin="anonymous"
     />
+
     <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
   <body>
-    <h1>Register</h1>
-    <p>Welcome to Express</p>
+    <!-- Navbar-->
+    <header class="header">
+      <nav class="navbar navbar-expand-lg navbar-light py-3">
+        <div class="container">
+          <!-- Navbar Brand -->
+          <a href="#" class="navbar-brand">
+            <img
+              src="https://res.cloudinary.com/mhmd/image/upload/v1571398888/Group_1514_tjekh3_zkts1c.svg"
+              alt="logo"
+              width="150"
+            />
+          </a>
+        </div>
+      </nav>
+    </header>
     <div class="container">
-      <form action="/register/" method="post">
-        <div class="form-floating mb-3">
-          <input
-            type="text"
-            class="form-control"
-            id="first_name"
-            name="first_name"
-            placeholder="first name"
+      <div class="row py-5 mt-4 align-items-center">
+        <!-- For Demo Purpose -->
+        <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
+          <img
+            src="https://res.cloudinary.com/mhmd/image/upload/v1569543678/form_d9sh6m.svg"
+            alt=""
+            class="img-fluid mb-3 d-none d-md-block"
           />
-          <label for="first_name">First Name</label>
+          <h1>Create an Account</h1>
+          <p class="font-italic text-muted mb-0">
+            Create a minimal registeration page using Bootstrap 4 HTML form
+            elements.
+          </p>
+          <p class="font-italic text-muted">
+            Snippet By
+            <a href="https://bootstrapious.com" class="text-muted">
+              <u>Bootstrapious</u></a
+            >
+          </p>
         </div>
-        <div class="form-floating mb-3">
-          <input
-            type="text"
-            class="form-control"
-            id="last_name"
-            name="last_name"
-            placeholder="last name"
-          />
-          <label for="last_name">Last Name</label>
+
+        <!-- Registeration Form -->
+        <div class="col-md-7 col-lg-6 ml-auto">
+          <form action="/register/" method="post">
+            <div class="row">
+              <!-- First Name -->
+              <div class="input-group col-lg-6 mb-4">
+                <input
+                  id="first_name"
+                  type="text"
+                  name="first_name"
+                  placeholder="First Name"
+                  class="form-control bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Last Name -->
+              <div class="input-group col-lg-6 mb-4">
+                <input
+                  id="last_name"
+                  type="text"
+                  name="last_name"
+                  placeholder="Last Name"
+                  class="form-control bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Email Address -->
+              <div class="input-group col-lg-12 mb-4">
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  class="form-control bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Password -->
+              <div class="input-group col-lg-6 mb-4">
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  class="form-control bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Password Confirmation -->
+              <div class="input-group col-lg-6 mb-4">
+                <input
+                  id="password_confirmation"
+                  type="text"
+                  name="password_confirmation"
+                  placeholder="Confirm Password"
+                  class="form-control bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-group col-lg-12 mx-auto mb-0">
+                <button type="submit" class="btn btn-primary btn-block py-2">
+                  <span class="font-weight-bold">Create your account</span>
+                </button>
+              </div>
+              <!-- Already Registered -->
+              <div class="text-center w-100">
+                <p class="text-muted font-weight-bold">
+                  Already Registered?
+                  <a href="/login" class="text-primary ml-2">Login</a>
+                </p>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="form-floating mb-3">
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            placeholder="example@example.com"
-          />
-          <label for="email">Email address</label>
-        </div>
-        <div class="form-floating mb-3">
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="Password"
-          />
-          <label for="password">Password</label>
-        </div>
-        <div class="form-floating">
-          <button type="submit" class="btn btn-primary mb-3">Register</button>
-        </div>
-      </form>
+      </div>
     </div>
   </body>
   <script
