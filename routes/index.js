@@ -31,10 +31,14 @@ router.post('/register', async (req, res) => {
     ...user,
     password: hash,
   };
-  const userId = await stockTracker.addUser(new_user);
-  // console.log(userId);
-  req.session.user_id = userId;
-  res.redirect('/watchlists');
+  try {
+    const userId = await stockTracker.addUser(new_user);
+    // console.log(userId);
+    req.session.user_id = userId;
+    res.redirect('/watchlists');
+  } catch {
+    throw 'Something went wrong';
+  }
 });
 
 router.get('/register', (req, res) => {
