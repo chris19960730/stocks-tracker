@@ -234,7 +234,8 @@ const deleteStock = async () => {
 // };
 // tickerInput.addEventListener('focus', clearSearchResult);
 
-window.onload = () => {
-  console.log('reloaded!');
-  showUserStocks();
-};
+// window.onload = () => {
+//   console.log('reloaded!');
+//   showUserStocks();
+// };
+showUserStocks();
