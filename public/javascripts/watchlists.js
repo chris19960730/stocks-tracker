@@ -97,11 +97,11 @@ const addStock = async () => {
       body: JSON.stringify(stockToDatabase),
     })
       .then(console.log('Success'))
+      .then(() => showUserStocks())
       .catch((error) => {
         console.error('Error:', error);
       });
     // window.location = '/watchlists';
-    showUserStocks();
   }
 };
 
