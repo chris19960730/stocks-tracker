@@ -1,7 +1,10 @@
 let stockToDatabase = null;
 const insertStockIntoPage = async () => {
+  const result = document.querySelector('#result');
+  result.innerHTML = '';
   const resultDiv = document.createElement('div');
   resultDiv.setAttribute('id', 'stockResult');
+  resultDiv.innerHTML = '';
   const ticker = document.querySelector('#ticker').value.toUpperCase();
   // console.log(ticker);
   const res = await fetch('/stocks?ticker=' + ticker);
@@ -68,8 +71,7 @@ const insertStockIntoPage = async () => {
       resultDiv.appendChild(addBtn);
       addBtn.addEventListener('click', addStock);
     }
-    const oldDiv = document.getElementById('stockResult');
-    document.getElementById('result').replaceChild(resultDiv, oldDiv);
+    document.getElementById('result').appendChild(resultDiv);
   } else {
     const alertContainer = document.querySelector('#alertContainer');
     message = 'No data founded for this ticker symbol, double-check you input!';
@@ -84,6 +86,8 @@ const searchBtn = document.querySelector('#searchBtn');
 searchBtn.addEventListener('click', insertStockIntoPage);
 
 const addStock = async () => {
+  const result = document.querySelector('#result');
+  result.innerHTML = '';
   if (stockToDatabase) {
     fetch('/myStocks', {
       method: 'POST',
@@ -96,7 +100,8 @@ const addStock = async () => {
       .catch((error) => {
         console.error('Error:', error);
       });
-    window.location = '/watchlists';
+    // window.location = '/watchlists';
+    showUserStocks();
   }
 };
 
@@ -108,12 +113,14 @@ const getCurrentUserStocks = async () => {
 };
 
 const showUserStocks = async () => {
+  const myStockList = document.querySelector('#myStockList');
+  myStockList.innerHTML = '';
   const stocks = await getCurrentUserStocks();
   console.log(stocks);
   if (!stocks || stocks.length === 0) {
     return;
   }
-  const myStockList = document.querySelector('#myStockList');
+  // const myStockList = document.querySelector('#myStockList');
   const thead = document.createElement('thead');
   const tr = document.createElement('tr');
   const colName = [
@@ -174,7 +181,6 @@ const showUserStocks = async () => {
     tbody.appendChild(row);
   });
   myStockList.appendChild(tbody);
-  addRemoveInputElement();
 };
 
 const removeStock = (stock_id) => {
@@ -185,78 +191,49 @@ const removeStock = (stock_id) => {
     },
     body: JSON.stringify({ stock_id: stock_id }),
   })
-    .then((window.location = '/watchlists'))
+    .then(() => {
+      showUserStocks();
+    })
     .catch((error) => {
       console.error('Error:', error);
     });
 };
 
-const addRemoveInputElement = async () => {
-  const select = document.createElement('select');
-  select.className = 'form-select';
-  select.setAttribute('id', 'selectInput');
-  const stocks = await getCurrentUserStocks();
-  const option = document.createElement('option');
-  option.setAttribute('selected', true);
-  option.value = '';
-  option.appendChild(
-    document.createTextNode('Select a stock to remove from your watchlist')
-  );
-  select.appendChild(option);
+// const addRemoveInputElement = async () => {
+//   const select = document.createElement('select');
+//   select.className = 'form-select';
+//   select.setAttribute('id', 'selectInput');
+//   const stocks = await getCurrentUserStocks();
+//   const option = document.createElement('option');
+//   option.setAttribute('selected', true);
+//   option.value = '';
+//   option.appendChild(
+//     document.createTextNode('Select a stock to remove from your watchlist')
+//   );
+//   select.appendChild(option);
 
-  stocks.forEach((stock) => {
-    const option = document.createElement('option');
-    option.value = stock.ticker;
-    option.appendChild(document.createTextNode(stock.ticker));
-    select.appendChild(option);
-  });
+//   stocks.forEach((stock) => {
+//     const option = document.createElement('option');
+//     option.value = stock.ticker;
+//     option.appendChild(document.createTextNode(stock.ticker));
+//     select.appendChild(option);
+//   });
 
-  // const submitBtn = document.createElement('button');
-  // submitBtn.className = 'btn btn-outline-danger';
-  // submitBtn.appendChild(document.createTextNode('Remove'));
-  // submitBtn.addEventListener('click', deleteStock);
-  document.querySelector('#removeInput').appendChild(select);
-  // document.querySelector('#deleteBtnRow').appendChild(submitBtn);
+//   // const submitBtn = document.createElement('button');
+//   // submitBtn.className = 'btn btn-outline-danger';
+//   // submitBtn.appendChild(document.createTextNode('Remove'));
+//   // submitBtn.addEventListener('click', deleteStock);
+//   document.querySelector('#removeInput').appendChild(select);
+//   // document.querySelector('#deleteBtnRow').appendChild(submitBtn);
 
-  const deleteBtnRow = document.querySelector('#deleteBtnRow');
-  deleteBtnRow.innerHTML =
-    '<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >' +
-    'Remove' +
-    '</button>';
-  const modalConfirmBtn = document.querySelector('#yes');
-  modalConfirmBtn.addEventListener('click', deleteStock);
-  console.log(document.querySelector('#selectInput').value);
-};
-
-const deleteStock = async () => {
-  const ticker = document.querySelector('#selectInput').value.toUpperCase();
-  if (!ticker) {
-    return;
-  }
-  fetch('/myStocks', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ticker: ticker }),
-  })
-    .then((window.location = '/watchlists'))
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-};
-
-// hacky way, to refresh page after searching
-// const tickerInput = document.querySelector('#ticker');
-// const clearSearchResult = () => {
-//   if (tickerInput.value) {
-//     window.location = '/watchlists';
-//   }
+//   const deleteBtnRow = document.querySelector('#deleteBtnRow');
+//   deleteBtnRow.innerHTML =
+//     '<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >' +
+//     'Remove' +
+//     '</button>';
+//   const modalConfirmBtn = document.querySelector('#yes');
+//   modalConfirmBtn.addEventListener('click', deleteStock);
+//   console.log(document.querySelector('#selectInput').value);
 // };
-// tickerInput.addEventListener('focus', clearSearchResult);
 
-// window.onload = () => {
-//   console.log('reloaded!');
-//   showUserStocks();
-// };
 showUserStocks();
