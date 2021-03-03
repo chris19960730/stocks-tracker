@@ -55,18 +55,25 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await stockTracker.getUser(email);
     const match = await bcrypt.compare(password, user.password);
     if (match) {
       req.session.user_id = user._id;
-      res.redirect('/watchlists');
+      // res.redirect('/watchlists');
+      res.send({ status: true });
     } else {
-      res.redirect('/login.html');
+      // res.redirect('/login.html');
+      res.send({
+        status: false,
+      });
     }
   } catch {
-    res.redirect('/login.html');
+    res.send({
+      status: false,
+    });
   }
 });
 
