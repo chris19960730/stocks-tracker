@@ -4,6 +4,8 @@ const url = process.env.MONGO_URL || 'mongodb://localhost:27017/';
 
 module.exports = {
   addUser: async (user) => {
+    console.log('database url is *************');
+    console.log(url);
     const client = new MongoClient(url, { useUnifiedTopology: true });
     await client.connect();
     const db = client.db('stockTracker');
@@ -18,6 +20,7 @@ module.exports = {
       client.close();
       return x.insertedId;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },

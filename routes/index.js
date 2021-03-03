@@ -36,7 +36,8 @@ router.post('/register', async (req, res) => {
     // console.log(userId);
     req.session.user_id = userId;
     res.redirect('/watchlists');
-  } catch {
+  } catch (err) {
+    console.log(err);
     throw 'Something went wrong';
   }
 });
