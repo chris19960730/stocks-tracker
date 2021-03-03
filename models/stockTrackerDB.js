@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const url = process.env.MONGO_URL || 'mongodb://localhost:27017/';
 
@@ -81,15 +81,14 @@ module.exports = {
       throw err;
     }
   },
-  removeStock: async (user_id, ticker) => {
+  removeStock: async (stock_id) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
     try {
       await client.connect();
       const db = client.db('stockTracker');
       const stocks = db.collection('stocks');
       const x = await stocks.deleteOne({
-        user_id: user_id,
-        ticker: ticker,
+        _id: ObjectId(stock_id),
       });
 
       client.close();

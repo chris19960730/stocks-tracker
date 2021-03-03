@@ -158,6 +158,13 @@ const showUserStocks = async () => {
     a.href = stock.website;
     a.appendChild(document.createTextNode('check out homePage'));
     td5.appendChild(a);
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn btn-outline-danger';
+    removeBtn.appendChild(document.createTextNode('Remove'));
+    removeBtn.addEventListener('click', () => {
+      removeStock(stock._id);
+    });
+    td5.appendChild(removeBtn);
     row.appendChild(th);
     row.appendChild(td1);
     row.appendChild(td2);
@@ -168,6 +175,20 @@ const showUserStocks = async () => {
   });
   myStockList.appendChild(tbody);
   addRemoveInputElement();
+};
+
+const removeStock = (stock_id) => {
+  fetch('/myStocks', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ stock_id: stock_id }),
+  })
+    .then((window.location = '/watchlists'))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 };
 
 const addRemoveInputElement = async () => {

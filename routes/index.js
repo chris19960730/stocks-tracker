@@ -127,13 +127,10 @@ router.get('/myStocks', requireLogin, async (req, res) => {
 });
 
 router.delete('/myStocks', requireLogin, async (req, res) => {
-  // console.log(req.body);
-  const { ticker } = req.body;
+  console.log(req.body);
+  const { stock_id } = req.body;
   try {
-    const deletedStock = await stockTracker.removeStock(
-      req.session.user_id,
-      ticker
-    );
+    const deletedStock = await stockTracker.removeStock(stock_id);
     console.log(deletedStock);
     res.status(200).send('Deleted successfully');
   } catch (err) {
