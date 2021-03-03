@@ -7,10 +7,11 @@ module.exports = {
     console.log('database url is *************');
     console.log(url);
     const client = new MongoClient(url, { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db('stockTracker');
-    const users = db.collection('user');
     try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const users = db.collection('user');
+
       const x = await users.insertOne({
         first_name: user.first_name,
         last_name: user.last_name,
@@ -26,10 +27,10 @@ module.exports = {
   },
   getUser: async (email) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db('stockTracker');
-    const users = db.collection('user');
     try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const users = db.collection('user');
       const userFound = await users.findOne({
         email: email,
       });
@@ -42,10 +43,10 @@ module.exports = {
 
   addStock: async (user_id, stock) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db('stockTracker');
-    const stocks = db.collection('stocks');
     try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const stocks = db.collection('stocks');
       const x = await stocks.insertOne({
         user_id: user_id,
         ticker: stock.ticker,
@@ -64,10 +65,10 @@ module.exports = {
 
   getCurrentUserStocks: async (user_id) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db('stockTracker');
-    const stocks = db.collection('stocks');
     try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const stocks = db.collection('stocks');
       const currentUserStocks = await stocks
         .find({
           user_id: user_id,
@@ -82,10 +83,10 @@ module.exports = {
   },
   removeStock: async (user_id, ticker) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
-    await client.connect();
-    const db = client.db('stockTracker');
-    const stocks = db.collection('stocks');
     try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const stocks = db.collection('stocks');
       const x = await stocks.deleteOne({
         user_id: user_id,
         ticker: ticker,
