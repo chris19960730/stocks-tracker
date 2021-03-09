@@ -25,6 +25,7 @@ module.exports = {
       throw err;
     }
   },
+
   getUser: async (email) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
     try {
@@ -37,6 +38,49 @@ module.exports = {
       client.close();
       return userFound;
     } catch (err) {
+      throw err;
+    }
+  },
+
+  getUserById: async (user_id) => {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+    try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const users = db.collection('user');
+      const userFound = await users.findOne({
+        _id: ObjectId(user_id),
+      });
+      client.close();
+      return userFound;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  updateUser: async (user, user_id) => {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+    try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const users = db.collection('user');
+
+      await users.updateOne(
+        {
+          _id: ObjectId(user_id),
+        },
+        {
+          $set: {
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            password: user.password,
+          },
+        }
+      );
+      client.close();
+    } catch (err) {
+      console.log(err);
       throw err;
     }
   },
@@ -81,6 +125,7 @@ module.exports = {
       throw err;
     }
   },
+
   removeStock: async (stock_id) => {
     const client = new MongoClient(url, { useUnifiedTopology: true });
     try {

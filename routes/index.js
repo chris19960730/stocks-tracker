@@ -145,4 +145,38 @@ router.delete('/myStocks', requireLogin, async (req, res) => {
   }
 });
 
+router.get('/myProfile', requireLogin, async (req, res) => {
+  console.log(req.session.user_id);
+  try {
+    const user = await stockTracker.getUserById(req.session.user_id);
+    res.json(user);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+router.get('/profile', requireLogin, async (req, res) => {
+  res.redirect('/profile.html');
+});
+
+router.get('/update_profile', requireLogin, async (req, res) => {
+  res.redirect('/update_profile.html');
+});
+
+router.post('/profile', requireLogin, async (req, res) => {
+  console.log(req.body);
+  const user = req.body;
+  const hash = await bcrypt.hash(user.password, 10);
+  const new_user = {
+    ...user,
+    password: hash,
+  };
+  try {
+    await stockTracker.updateUser(new_user, req.session.user_id);
+    res.redirect('/profile.html');
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 module.exports = router;

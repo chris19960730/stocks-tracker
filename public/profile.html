@@ -78,7 +78,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="profile.html">About Me</a>
+              <a class="nav-link" href="profile">About Me</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="education.html">Educations</a>
@@ -101,48 +101,9 @@
     </nav>
 
     <div class="container">
-      <div class="row">
-        <div class="col-md-12" id="alertContainer"></div>
-      </div>
-      <div class="row align-items-center">
-        <div class="col-md-2"></div>
-        <div class="col-md-1">
-          <label for="ticker" class="col-form-label">Stock ticker</label>
+        <div class="row" id="myProfile">
+            
         </div>
-        <div class="col-md-5">
-          <input
-            type="text"
-            class="form-control"
-            id="ticker"
-            name="ticker"
-            placeholder="e.g. AAPL"
-          />
-        </div>
-        <div class="col-md-2 search-btn">
-          <button id="searchBtn" class="btn btn-success">
-            <i class="fas fa-search-dollar"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div id="result" class="col-md-4 mt-5">
-          <div id="stockResult"></div>
-        </div>
-      </div>
-
-      <div class="stocks mt-5">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <table id="myStockList" class="table table-image"></table>
-            </div>
-            <div id="removeInput" class="col-12"></div>
-            <div id="deleteBtnRow" class="col-12"></div>
-          </div>
-        </div>
-      </div>
     </div>
   </body>
   <script
@@ -150,5 +111,5 @@
     integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
     crossorigin="anonymous"
   ></script>
-  <script src="./javascripts/watchlists.js"></script>
+  <script src="./javascripts/profile.js"></script>
 </html>
