@@ -13,11 +13,16 @@ submit.addEventListener('click', (event) => {
   formData.password = password;
   formData.first_name = firstName;
   formData.last_name = lastName;
-  if (passwordConfirmation === password) {
-    postRegisterData(formData);
-  } else {
-    showErrorMsg();
+  if (!checkInputData(formData)) {
+    showErrorMsg('Please fill in all fields before submitting!', 'info');
+    return;
   }
+  if (passwordConfirmation != password) {
+    showErrorMsg('Password not match!', 'danger');
+    return;
+  }
+  // check email exists
+  checkEmailExists({ email: email }, formData);
 });
 
 const postRegisterData = async (formData) => {
@@ -33,7 +38,7 @@ const postRegisterData = async (formData) => {
       if (data.status) {
         window.location = '/watchlists';
       } else {
-        showErrorMsg();
+        showErrorMsg('Something went wrong', 'secondary');
       }
     })
     .catch(() => {
@@ -41,10 +46,41 @@ const postRegisterData = async (formData) => {
     });
 };
 
-const showErrorMsg = () => {
+const checkEmailExists = async (email, formData) => {
+  fetch('/verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(email),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log('reponse');
+      console.log(data);
+      console.log(data.exist);
+      if (data && data.exist) {
+        showErrorMsg('This email has already been used!', 'warning');
+      } else {
+        postRegisterData(formData);
+      }
+    })
+    .catch(() => {
+      return false;
+    });
+};
+
+const checkInputData = (formData) => {
+  for (const key in formData) {
+    if (!formData[key]) return false;
+  }
+  return true;
+};
+
+const showErrorMsg = (msg, color) => {
   const errorDiv = document.querySelector('#errrorMessage');
   errorDiv.innerHTML = '';
-  errorDiv.innerHTML = `<div class="alert alert-warning fade show"  role="alert"> 
-   <strong>Password not match!</strong> Please try again </div>
-   `;
+  errorDiv.innerHTML = `<div class="alert alert-${color} fade show"  role="alert"> 
+     <strong>${msg}</strong> Please try again </div>
+     `;
 };

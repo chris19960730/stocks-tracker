@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const path = require('path');
+
 const router = express.Router();
 const { IEXCloudClient } = require('node-iex-cloud');
 const fetch = require('node-fetch');
@@ -80,6 +80,24 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/verify', async (req, res) => {
+  console.log(req.body);
+  const { email } = req.body;
+  try {
+    const user = await stockTracker.getUser(email);
+    console.log(user);
+    if (user) {
+      console.log('has user exist');
+      res.send({ exist: true });
+    } else {
+      // res.redirect('/login.html');
+      res.send({ exist: false });
+    }
+  } catch {
+    res.send({ error: 'error' });
+  }
+});
+
 router.post('/logout', (req, res) => {
   req.session.user_id = null;
   req.session.destroy();
@@ -97,7 +115,7 @@ router.get('/stocks', requireLogin, async (req, res) => {
   const { high, low } = await stock.previous();
   const company = await stock.company();
   if (logo && high && low) {
-    stockInfo = {
+    const stockInfo = {
       ticker: ticker,
       logo: logo,
       high_price: high,
