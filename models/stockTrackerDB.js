@@ -4,8 +4,6 @@ const url = process.env.MONGO_URL || 'mongodb://localhost:27017/';
 
 module.exports = {
   addUser: async (user) => {
-    console.log('database url is *************');
-    console.log(url);
     const client = new MongoClient(url, { useUnifiedTopology: true });
     try {
       await client.connect();

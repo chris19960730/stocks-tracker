@@ -25,6 +25,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
+  console.log(req.body);
   const user = req.body;
   const hash = await bcrypt.hash(user.password, 10);
   const new_user = {
@@ -35,10 +36,12 @@ router.post('/register', async (req, res) => {
     const userId = await stockTracker.addUser(new_user);
     // console.log(userId);
     req.session.user_id = userId;
-    res.redirect('/watchlists');
-  } catch (err) {
-    console.log(err);
-    throw 'Something went wrong';
+    // res.redirect('/watchlists');
+    res.send({ status: true });
+  } catch {
+    res.send({
+      status: false,
+    });
   }
 });
 
