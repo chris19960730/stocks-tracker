@@ -200,4 +200,21 @@ router.post('/profile', requireLogin, async (req, res) => {
   }
 });
 
+router.get('/friends', requireLogin, async (req, res) => {
+  const { queryRegex } = req.query;
+  const current_user_id = req.session.user_id;
+  console.log(current_user_id);
+
+  try {
+    const users = await stockTracker.getUserByRegex(
+      queryRegex,
+      current_user_id
+    );
+    console.log(users);
+    res.send(users);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 module.exports = router;

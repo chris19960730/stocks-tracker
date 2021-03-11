@@ -116,7 +116,6 @@ module.exports = {
           user_id: user_id,
         })
         .toArray();
-
       client.close();
       return currentUserStocks;
     } catch (err) {
@@ -136,6 +135,24 @@ module.exports = {
 
       client.close();
       return x;
+    } catch (err) {
+      throw err;
+    }
+  },
+  getUserByRegex: async (queryRegex, current_user_id) => {
+    const client = new MongoClient(url, { useUnifiedTopology: true });
+    try {
+      await client.connect();
+      const db = client.db('stockTracker');
+      const users = db.collection('user');
+      const result = await users
+        .find({
+          email: { $regex: queryRegex },
+          _id: { $ne: ObjectId(current_user_id) },
+        })
+        .toArray();
+      client.close();
+      return result;
     } catch (err) {
       throw err;
     }
