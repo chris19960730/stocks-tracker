@@ -194,7 +194,7 @@ router.post('/profile', requireLogin, async (req, res) => {
   };
   try {
     await stockTracker.updateUser(new_user, req.session.user_id);
-    res.redirect('/profile.html');
+    res.send({ status: true });
   } catch (err) {
     res.send(err);
   }
