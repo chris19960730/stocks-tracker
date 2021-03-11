@@ -16,7 +16,7 @@ const showUserProfile = async () => {
   firstNameRow.className = 'row';
   const firstNameLeftCol = document.createElement('div');
   firstNameLeftCol.className = 'col-lg-5';
-  firstNameLeftCol.innerHTML = '<p>' + 'First Name' + '</p>';
+  firstNameLeftCol.innerHTML = '<p>' + 'First Name: ' + '</p>';
   firstNameRow.appendChild(firstNameLeftCol);
   const firstNameRightCol = document.createElement('div');
   firstNameRightCol.className = 'col-lg-7';
@@ -28,7 +28,7 @@ const showUserProfile = async () => {
   lastNameRow.className = 'row';
   const lastNameLeftCol = document.createElement('div');
   lastNameLeftCol.className = 'col-lg-5';
-  lastNameLeftCol.innerHTML = '<p>' + 'Last Name' + '</p>';
+  lastNameLeftCol.innerHTML = '<p>' + 'Last Name: ' + '</p>';
   lastNameRow.appendChild(lastNameLeftCol);
   const lastNameRightCol = document.createElement('div');
   lastNameRightCol.className = 'col-lg-7';
@@ -40,7 +40,7 @@ const showUserProfile = async () => {
   emailRow.className = 'row';
   const emailLeftCol = document.createElement('div');
   emailLeftCol.className = 'col-lg-5';
-  emailLeftCol.innerHTML = '<p>' + 'Email Address' + '</p>';
+  emailLeftCol.innerHTML = '<p>' + 'Email Address: ' + '</p>';
   emailRow.appendChild(emailLeftCol);
   const emailRightCol = document.createElement('div');
   emailRightCol.className = 'col-lg-7';

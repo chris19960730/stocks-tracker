@@ -17,9 +17,11 @@
   </head>
 
   <body>
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">Stocks Tracker</a>
+        <a class="navbar-brand" href="/watchlists">
+          <img src="./images/logo.svg" alt="logo" height="70"
+        /></a>
         <button
           class="navbar-toggler"
           type="button"
@@ -38,25 +40,26 @@
         >
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html"
-                >Home</a
+              <a class="nav-link" aria-current="page" href="/watchlists"
+                >Watchlist</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="profile">About Me</a>
+              <a class="nav-link" href="/friends.html">Friends</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="education.html">Educations</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="gallery.html">Gallery</a>
+              <a class="nav-link active" href="/profile">My Profile</a>
             </li>
           </ul>
           <div class="justify-content-end">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
                 <form action="/logout" method="POST">
-                  <button class="nav-link border-0 bg-0">logout</button>
+                  <input
+                    class="btn btn-block btn-danger"
+                    type="submit"
+                    value="logout"
+                  />
                 </form>
               </li>
             </ul>
@@ -65,8 +68,18 @@
       </div>
     </nav>
 
-    <div class="container">
-      <div class="row" id="myProfile"></div>
+    <div class="container mt-3">
+      <div class="row mb-2">
+        <div class="col-12 text-center pt-3">
+          <h1>My Profile</h1>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-3"></div>
+        <div class="col-md-6" id="myProfile"></div>
+
+        <div class="col-md-3"></div>
+      </div>
     </div>
   </body>
   <script

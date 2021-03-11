@@ -35,6 +35,18 @@ const insertStockIntoPage = async () => {
     const infoList = document.createElement('ul');
     infoList.classList = 'list-group list-group-flush';
     for (const key in stockInfo) {
+      if (key == 'website') {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        const anchor = document.createElement('a');
+        anchor.href = stockInfo[key];
+        const content = document.createTextNode(stockInfo[key]);
+        anchor.appendChild(content);
+        li.appendChild(document.createTextNode(key + ' : '));
+        li.appendChild(anchor);
+        infoList.appendChild(li);
+        continue;
+      }
       if (key != 'logo') {
         const li = document.createElement('li');
         li.className = 'list-group-item';
@@ -74,7 +86,8 @@ const insertStockIntoPage = async () => {
     document.getElementById('result').appendChild(resultDiv);
   } else {
     const alertContainer = document.querySelector('#alertContainer');
-    message = 'No data founded for this ticker symbol, double-check you input!';
+    const message =
+      'No data founded for this ticker symbol, double-check you input!';
     alertContainer.innerHTML =
       '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>' +
       message +
@@ -161,7 +174,7 @@ const showUserStocks = async () => {
     td4.appendChild(document.createTextNode(stock.low_price));
     const td5 = document.createElement('td');
     const a = document.createElement('a');
-    a.className = 'btn btn-outline-primary';
+    a.className = 'btn btn-outline-primary me-3';
     a.href = stock.website;
     a.appendChild(document.createTextNode('check out homePage'));
     td5.appendChild(a);
