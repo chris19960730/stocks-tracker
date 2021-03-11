@@ -19,17 +19,15 @@
   <body>
     <div
       class="modal fade"
-      id="exampleModal"
+      id="profileDetailModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">
-              Are you sure you wanna remove this stock from your watchlist?
-            </h5>
+            <h5 class="modal-title" id="exampleModalLabel"></h5>
             <button
               type="button"
               class="btn-close"
@@ -37,10 +35,10 @@
               aria-label="Close"
             ></button>
           </div>
+          <div class="modal-body">
+            <table id="stocksList" class="table"></table>
+          </div>
           <div class="modal-footer">
-            <button id="yes" type="button" class="btn btn-success">
-              Delete anyway
-            </button>
             <button
               type="button"
               class="btn btn-secondary"

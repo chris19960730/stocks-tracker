@@ -176,6 +176,16 @@ router.get('/myProfile', requireLogin, async (req, res) => {
   }
 });
 
+router.get('/userProfile', requireLogin, async (req, res) => {
+  const { user_id } = req.query;
+  try {
+    const user = await stockTracker.getUserById(user_id);
+    res.json(user);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
 router.get('/profile', requireLogin, async (req, res) => {
   res.redirect('/profile.html');
 });
@@ -212,6 +222,18 @@ router.get('/friends', requireLogin, async (req, res) => {
     );
     console.log(users);
     res.send(users);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+router.get('/friendStocks', requireLogin, async (req, res) => {
+  const { user_id } = req.query;
+
+  try {
+    const stocks = await stockTracker.getCurrentUserStocks(user_id);
+    console.log(stocks);
+    res.send(stocks);
   } catch (err) {
     res.send(err);
   }
