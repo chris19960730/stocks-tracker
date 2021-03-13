@@ -7,7 +7,6 @@ const getCurrentUserProfile = async () => {
 const showUserProfile = async () => {
   const myProfile = document.querySelector('#myProfile');
   const user = await getCurrentUserProfile();
-  console.log(user);
   if (!user || user.length === 0) {
     return;
   }
@@ -55,7 +54,6 @@ const showUserProfile = async () => {
   buttonRow.innerHTML =
     '<a href="/update_profile" class="btn btn-primary">Change your information</a>';
   myProfile.appendChild(buttonRow);
-  console.log('finish rendering');
 };
 
 showUserProfile();

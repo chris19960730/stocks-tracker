@@ -1,5 +1,6 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
+// eslint-disable-next-line no-undef
 const url = process.env.MONGO_URL || 'mongodb://localhost:27017/';
 
 module.exports = {
@@ -16,11 +17,9 @@ module.exports = {
         email: user.email,
         password: user.password,
       });
-      client.close();
       return x.insertedId;
-    } catch (err) {
-      console.log(err);
-      throw err;
+    } finally {
+      client.close();
     }
   },
 
@@ -33,10 +32,9 @@ module.exports = {
       const userFound = await users.findOne({
         email: email,
       });
-      client.close();
       return userFound;
-    } catch (err) {
-      throw err;
+    } finally {
+      client.close();
     }
   },
 
@@ -49,10 +47,9 @@ module.exports = {
       const userFound = await users.findOne({
         _id: ObjectId(user_id),
       });
-      client.close();
       return userFound;
-    } catch (err) {
-      throw err;
+    } finally {
+      client.close();
     }
   },
 
@@ -76,10 +73,8 @@ module.exports = {
           },
         }
       );
+    } finally {
       client.close();
-    } catch (err) {
-      console.log(err);
-      throw err;
     }
   },
 
@@ -89,7 +84,7 @@ module.exports = {
       await client.connect();
       const db = client.db('stockTracker');
       const stocks = db.collection('stocks');
-      const x = await stocks.insertOne({
+      await stocks.insertOne({
         user_id: user_id,
         ticker: stock.ticker,
         logo: stock.logo,
@@ -99,9 +94,8 @@ module.exports = {
         website: stock.website,
         CEO: stock.CEO,
       });
+    } finally {
       client.close();
-    } catch (err) {
-      throw err;
     }
   },
 
@@ -116,10 +110,9 @@ module.exports = {
           user_id: user_id,
         })
         .toArray();
-      client.close();
       return currentUserStocks;
-    } catch (err) {
-      throw err;
+    } finally {
+      client.close();
     }
   },
 
@@ -132,11 +125,9 @@ module.exports = {
       const x = await stocks.deleteOne({
         _id: ObjectId(stock_id),
       });
-
-      client.close();
       return x;
-    } catch (err) {
-      throw err;
+    } finally {
+      client.close();
     }
   },
   getUserByRegex: async (queryRegex, current_user_id) => {
@@ -151,10 +142,9 @@ module.exports = {
           _id: { $ne: ObjectId(current_user_id) },
         })
         .toArray();
-      client.close();
       return result;
-    } catch (err) {
-      throw err;
+    } finally {
+      client.close();
     }
   },
 };

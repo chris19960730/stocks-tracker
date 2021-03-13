@@ -1,15 +1,16 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-
 const router = express.Router();
+const dotenv = require('dotenv');
+dotenv.config();
 const { IEXCloudClient } = require('node-iex-cloud');
 const fetch = require('node-fetch');
-
 const stockTracker = require('../models/stockTrackerDB');
 
 const iex = new IEXCloudClient(fetch, {
   sandbox: false,
-  publishable: 'sk_15302993e1aa43c1b7e47474783d657d',
+  // eslint-disable-next-line no-undef
+  publishable: process.env.IEX_KEY,
   version: 'stable',
 });
 
@@ -25,7 +26,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-  console.log(req.body);
   const user = req.body;
   const hash = await bcrypt.hash(user.password, 10);
   const new_user = {
@@ -34,9 +34,7 @@ router.post('/register', async (req, res) => {
   };
   try {
     const userId = await stockTracker.addUser(new_user);
-    // console.log(userId);
     req.session.user_id = userId;
-    // res.redirect('/watchlists');
     res.send({ status: true });
   } catch {
     res.send({
@@ -58,17 +56,14 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await stockTracker.getUser(email);
     const match = await bcrypt.compare(password, user.password);
     if (match) {
       req.session.user_id = user._id;
-      // res.redirect('/watchlists');
       res.send({ status: true });
     } else {
-      // res.redirect('/login.html');
       res.send({
         status: false,
       });
@@ -81,16 +76,12 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/verify', async (req, res) => {
-  console.log(req.body);
   const { email } = req.body;
   try {
     const user = await stockTracker.getUser(email);
-    console.log(user);
     if (user) {
-      console.log('has user exist');
       res.send({ exist: true });
     } else {
-      // res.redirect('/login.html');
       res.send({ exist: false });
     }
   } catch {
@@ -106,11 +97,7 @@ router.post('/logout', (req, res) => {
 
 router.get('/stocks', requireLogin, async (req, res) => {
   const { ticker } = req.query;
-  // console.log(ticker);
-  // console.log(req.query);
-
   const stock = await iex.symbol(ticker);
-
   const logo = await stock.logo();
   const { high, low } = await stock.previous();
   const company = await stock.company();
@@ -124,7 +111,6 @@ router.get('/stocks', requireLogin, async (req, res) => {
       website: company.website,
       CEO: company.CEO,
     };
-    // console.log(stockInfo);
     res.send(stockInfo);
   } else {
     res.status('500').send({ err: 'Something went wrong' });
@@ -132,8 +118,6 @@ router.get('/stocks', requireLogin, async (req, res) => {
 });
 
 router.post('/myStocks', requireLogin, async (req, res) => {
-  // console.log(req.session.user_id);
-  // console.log(req.body);
   const stock = req.body;
   try {
     await stockTracker.addStock(req.session.user_id, stock);
@@ -144,10 +128,8 @@ router.post('/myStocks', requireLogin, async (req, res) => {
 });
 
 router.get('/myStocks', requireLogin, async (req, res) => {
-  console.log(req.session.user_id);
   try {
     const stocks = await stockTracker.getCurrentUserStocks(req.session.user_id);
-    // console.log(stocks);
     res.json(stocks);
   } catch (err) {
     res.send(err);
@@ -155,11 +137,9 @@ router.get('/myStocks', requireLogin, async (req, res) => {
 });
 
 router.delete('/myStocks', requireLogin, async (req, res) => {
-  console.log(req.body);
   const { stock_id } = req.body;
   try {
-    const deletedStock = await stockTracker.removeStock(stock_id);
-    console.log(deletedStock);
+    await stockTracker.removeStock(stock_id);
     res.status(200).send('Deleted successfully');
   } catch (err) {
     res.status(500).send(err);
@@ -167,7 +147,6 @@ router.delete('/myStocks', requireLogin, async (req, res) => {
 });
 
 router.get('/myProfile', requireLogin, async (req, res) => {
-  console.log(req.session.user_id);
   try {
     const user = await stockTracker.getUserById(req.session.user_id);
     res.json(user);
@@ -195,7 +174,6 @@ router.get('/update_profile', requireLogin, async (req, res) => {
 });
 
 router.post('/profile', requireLogin, async (req, res) => {
-  console.log(req.body);
   const user = req.body;
   const hash = await bcrypt.hash(user.password, 10);
   const new_user = {
@@ -213,14 +191,12 @@ router.post('/profile', requireLogin, async (req, res) => {
 router.get('/friends', requireLogin, async (req, res) => {
   const { queryRegex } = req.query;
   const current_user_id = req.session.user_id;
-  console.log(current_user_id);
 
   try {
     const users = await stockTracker.getUserByRegex(
       queryRegex,
       current_user_id
     );
-    console.log(users);
     res.send(users);
   } catch (err) {
     res.send(err);
@@ -232,11 +208,14 @@ router.get('/friendStocks', requireLogin, async (req, res) => {
 
   try {
     const stocks = await stockTracker.getCurrentUserStocks(user_id);
-    console.log(stocks);
     res.send(stocks);
   } catch (err) {
     res.send(err);
   }
+});
+
+router.get('*', requireLogin, async (req, res) => {
+  res.redirect('/watchlists');
 });
 
 module.exports = router;

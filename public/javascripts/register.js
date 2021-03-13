@@ -56,9 +56,6 @@ const checkEmailExists = async (email, formData) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log('reponse');
-      console.log(data);
-      console.log(data.exist);
       if (data && data.exist) {
         showErrorMsg('This email has already been used!', 'warning');
       } else {

@@ -1,6 +1,4 @@
 const express = require('express');
-const { IEXCloudClient } = require('node-iex-cloud');
-const fetch = require('node-fetch');
 const path = require('path');
 const session = require('express-session');
 
@@ -17,10 +15,12 @@ app.use(
     saveUninitialized: true,
   })
 );
+// eslint-disable-next-line no-undef
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
+// eslint-disable-next-line no-undef
 app.listen(process.env.PORT || 3000, () => {
   console.log('Server Started!');
 });

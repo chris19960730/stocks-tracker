@@ -6,17 +6,14 @@ const insertStockIntoPage = async () => {
   resultDiv.setAttribute('id', 'stockResult');
   resultDiv.innerHTML = '';
   const ticker = document.querySelector('#ticker').value.toUpperCase();
-  // console.log(ticker);
   const res = await fetch('/stocks?ticker=' + ticker);
+
   if (res.status === 200) {
     const stockInfo = await res.json();
-
     stockToDatabase = {
       ...stockInfo,
       logo: stockInfo.logo.url,
     };
-
-    // create card in the page
     const card = document.createElement('div');
     card.className = 'card';
     const image = document.createElement('img');
@@ -126,14 +123,12 @@ const addStock = async () => {
       .catch((error) => {
         console.error('Error:', error);
       });
-    // window.location = '/watchlists';
   }
 };
 
 const getCurrentUserStocks = async () => {
   const res = await fetch('/myStocks');
   const data = await res.json();
-  //   console.log(data);
   return data;
 };
 
@@ -141,11 +136,9 @@ const showUserStocks = async () => {
   const myStockList = document.querySelector('#myStockList');
   myStockList.innerHTML = '';
   const stocks = await getCurrentUserStocks();
-  console.log(stocks);
   if (!stocks || stocks.length === 0) {
     return;
   }
-  // const myStockList = document.querySelector('#myStockList');
   const thead = document.createElement('thead');
   const tr = document.createElement('tr');
   const colName = [
@@ -223,42 +216,4 @@ const removeStock = (stock_id) => {
       console.error('Error:', error);
     });
 };
-
-// const addRemoveInputElement = async () => {
-//   const select = document.createElement('select');
-//   select.className = 'form-select';
-//   select.setAttribute('id', 'selectInput');
-//   const stocks = await getCurrentUserStocks();
-//   const option = document.createElement('option');
-//   option.setAttribute('selected', true);
-//   option.value = '';
-//   option.appendChild(
-//     document.createTextNode('Select a stock to remove from your watchlist')
-//   );
-//   select.appendChild(option);
-
-//   stocks.forEach((stock) => {
-//     const option = document.createElement('option');
-//     option.value = stock.ticker;
-//     option.appendChild(document.createTextNode(stock.ticker));
-//     select.appendChild(option);
-//   });
-
-//   // const submitBtn = document.createElement('button');
-//   // submitBtn.className = 'btn btn-outline-danger';
-//   // submitBtn.appendChild(document.createTextNode('Remove'));
-//   // submitBtn.addEventListener('click', deleteStock);
-//   document.querySelector('#removeInput').appendChild(select);
-//   // document.querySelector('#deleteBtnRow').appendChild(submitBtn);
-
-//   const deleteBtnRow = document.querySelector('#deleteBtnRow');
-//   deleteBtnRow.innerHTML =
-//     '<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" >' +
-//     'Remove' +
-//     '</button>';
-//   const modalConfirmBtn = document.querySelector('#yes');
-//   modalConfirmBtn.addEventListener('click', deleteStock);
-//   console.log(document.querySelector('#selectInput').value);
-// };
-
 showUserStocks();

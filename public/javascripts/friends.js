@@ -16,7 +16,6 @@ const searchUsers = async (queryRegex) => {
 const onClickSearchBtn = async () => {
   const queryRegex = document.querySelector('#friend').value;
   const usersInfo = await searchUsers(queryRegex);
-  console.log(usersInfo);
   loadTable(usersInfo);
 };
 
@@ -48,7 +47,6 @@ const loadTable = (usersInfo) => {
     viewProfileBtn.className = 'btn btn-outline-primary';
     viewProfileBtn.appendChild(document.createTextNode('View Profile'));
     viewProfileBtn.addEventListener('click', () => {
-      console.log(user._id);
       loadUserWatchlists(user._id);
     });
     td5.appendChild(viewProfileBtn);
@@ -69,11 +67,9 @@ const loadUserWatchlists = async (user_id) => {
   const res = await fetch('/friendStocks?user_id=' + user_id);
 
   const stocks = await res.json();
-  console.log(stocks);
 
   const userRes = await fetch('/userProfile?user_id=' + user_id);
   const user = await userRes.json();
-  console.log(user);
 
   document.querySelector(
     '#exampleModalLabel'
