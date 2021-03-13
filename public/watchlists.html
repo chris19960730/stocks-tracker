@@ -13,6 +13,11 @@
       integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
       crossorigin="anonymous"
     />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=JetBrains+Mono:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <link rel="stylesheet" href="/stylesheets/watchlists.css" />
   </head>
@@ -70,7 +75,7 @@
     </nav>
 
     <div class="container mt-5">
-      <div class="row mb-2">
+      <div class="row mb-5">
         <div class="col-12 text-center pt-3">
           <h1>My Stock Watchlist</h1>
           <p>Tracker as many stocks as you want!</p>
@@ -79,10 +84,9 @@
       <div class="row">
         <div class="col-md-12" id="alertContainer"></div>
       </div>
-      <div class="row align-items-center mt-3">
-        <div class="col-md-2"></div>
-        <div class="col-md-1">
-          <label for="ticker" class="col-form-label">Stock ticker</label>
+      <div class="row justify-content-center align-items-center mt-3">
+        <div class="col-md-2 label-col">
+          <label for="ticker" class="col-form-label">Stock Ticker</label>
         </div>
         <div class="col-md-5">
           <input
@@ -93,7 +97,7 @@
             placeholder="e.g. AAPL"
           />
         </div>
-        <div class="col-md-2 search-btn">
+        <div class="col-md-1 search-btn">
           <button id="searchBtn" class="btn btn-success">
             <i class="fas fa-search-dollar"></i>
           </button>
@@ -118,7 +122,7 @@
         </div>
       </div>
     </div>
-    <div class="footer-basic">
+    <div class="footer-basic fixed-bottom">
       <footer>
         <p class="copyright">
           Copyright © 2021, StockTracker by Haocheng & Ziqi

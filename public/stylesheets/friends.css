@@ -22,7 +22,7 @@ tbody tr th {
 }
 
 tr {
-  height: 8rem;
+  height: 4rem;
 }
 
 tbody td img.img-fluid.img-thumbnail {
@@ -36,6 +36,12 @@ tbody td img.img-fluid.img-thumbnail {
   margin: 0, 0, 0, auto;
 }
 
+#searchBtn {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}
+
 .col-md-2.label-col {
   text-align: right;
 }
@@ -45,12 +51,6 @@ label.col-form-label {
   width: 10rem;
   text-align: right;
   font-size: 1.2rem;
-}
-
-#searchBtn {
-  background-color: #0d6efd;
-  border-color: #0d6efd;
-  color: white;
 }
 
 #stockResult img.card-img-top {

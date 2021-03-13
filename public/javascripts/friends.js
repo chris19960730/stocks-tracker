@@ -45,7 +45,7 @@ const loadTable = (usersInfo) => {
     td4.appendChild(document.createTextNode(user.email));
     const td5 = document.createElement('td');
     const viewProfileBtn = document.createElement('button');
-    viewProfileBtn.className = 'btn btn-outline-success';
+    viewProfileBtn.className = 'btn btn-outline-primary';
     viewProfileBtn.appendChild(document.createTextNode('View Profile'));
     viewProfileBtn.addEventListener('click', () => {
       console.log(user._id);

@@ -1,0 +1,31 @@
+body {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+li.nav-item .nav-link {
+  font-weight: 800;
+}
+
+.h1,
+h1 {
+  font-family: 'Abril Fatface', cursive;
+}
+
+card.profile-card {
+  width: 75%;
+  height: 15rem;
+}
+
+#myProfile {
+  padding: 2rem;
+}
+
+label.col-form-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+button.btn.btn-primary {
+  width: 10rem;
+  margin: 0 auto;
+}

@@ -22,7 +22,6 @@ const insertStockIntoPage = async () => {
     const image = document.createElement('img');
     image.src = stockInfo.logo.url;
     image.className = 'card-img-top';
-    image.style.width = '12rem';
     card.appendChild(image);
 
     const cardBody = document.createElement('div');
@@ -34,6 +33,13 @@ const insertStockIntoPage = async () => {
     card.appendChild(cardBody);
     const infoList = document.createElement('ul');
     infoList.classList = 'list-group list-group-flush';
+    const stockInfoLabelText = {
+      ticker: 'Stock Ticker',
+      high_price: 'Hight Price',
+      low_price: 'Low Price',
+      companyName: 'Company Name',
+      website: 'Website',
+    };
     for (const key in stockInfo) {
       if (key == 'website') {
         const li = document.createElement('li');
@@ -42,7 +48,9 @@ const insertStockIntoPage = async () => {
         anchor.href = stockInfo[key];
         const content = document.createTextNode(stockInfo[key]);
         anchor.appendChild(content);
-        li.appendChild(document.createTextNode(key + ' : '));
+        li.appendChild(
+          document.createTextNode(stockInfoLabelText[key] + ' : ')
+        );
         li.appendChild(anchor);
         infoList.appendChild(li);
         continue;
@@ -50,7 +58,11 @@ const insertStockIntoPage = async () => {
       if (key != 'logo') {
         const li = document.createElement('li');
         li.className = 'list-group-item';
-        const content = document.createTextNode(key + ': ' + stockInfo[key]);
+        const content = document.createTextNode(
+          (key in stockInfoLabelText ? stockInfoLabelText[key] : key) +
+            ': ' +
+            stockInfo[key]
+        );
         li.appendChild(content);
         infoList.appendChild(li);
       }
@@ -69,18 +81,18 @@ const insertStockIntoPage = async () => {
 
     if (alreadyTracked) {
       const span = document.createElement('span');
-      span.className = 'badge bg-warning text-dark mt-3';
+      span.className = 'badge bg-warning text-dark';
       span.appendChild(
         document.createTextNode('You have already been tracking this stock')
       );
-      resultDiv.appendChild(span);
+      card.appendChild(span);
     } else {
       // add to watchlist button
       const addBtn = document.createElement('button');
       addBtn.className = 'btn btn-outline-primary';
       addBtn.setAttribute('id', 'addBtn');
       addBtn.appendChild(document.createTextNode('Add to watchlist'));
-      resultDiv.appendChild(addBtn);
+      card.appendChild(addBtn);
       addBtn.addEventListener('click', addStock);
     }
     document.getElementById('result').appendChild(resultDiv);
@@ -176,7 +188,7 @@ const showUserStocks = async () => {
     const a = document.createElement('a');
     a.className = 'btn btn-outline-primary me-3';
     a.href = stock.website;
-    a.appendChild(document.createTextNode('check out homePage'));
+    a.appendChild(document.createTextNode('Company Homepage'));
     td5.appendChild(a);
     const removeBtn = document.createElement('button');
     removeBtn.className = 'btn btn-outline-danger';
