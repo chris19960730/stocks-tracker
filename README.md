@@ -36,15 +36,13 @@ Users can search for stocks by stock symbol ticker, add them to their watchlist,
 [CS5610](https://johnguerra.co/classes/webDevelopment_spring_2021/)
 
 ## Link to the video demonstration
-wip
-[demonstration video](https://www.youtube.com/watch?v=XkaDYw4WkUk)
+[demonstration video](https://www.youtube.com/watch?v=reXtSRA3Am8)
 
 ## Demo Link
 [https://stock-trackerrr.herokuapp.com/](https://stock-trackerrr.herokuapp.com/)
 
 ### Google Slides
-wip
-[Slides](https://docs.google.com/presentation/d/1nO87GlvBGsjw71mY5K5bdo5fDJAiv8YP2R3zY6qRXro/edit#slide=id.gcb9a0b074_1_0)
+[Slides](https://docs.google.com/presentation/d/1cJzlyZRVlXcxBfDsXMVhZEf_wJp8noep_ds_MsZIl6E/edit#slide=id.p)
 
 ### MIT License
 [MIT License](https://github.com/chris19960730/stocks-tracker/blob/main/LICENSE)
