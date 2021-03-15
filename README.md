@@ -41,12 +41,11 @@ Users can search for stocks by stock symbol ticker, add them to their watchlist,
 ## Demo Link
 [https://stock-trackerrr.herokuapp.com/](https://stock-trackerrr.herokuapp.com/)
 
-### Google Slides
+## Google Slides
 [Slides](https://docs.google.com/presentation/d/1cJzlyZRVlXcxBfDsXMVhZEf_wJp8noep_ds_MsZIl6E/edit#slide=id.p)
 
-### MIT License
+## MIT License
 [MIT License](https://github.com/chris19960730/stocks-tracker/blob/main/LICENSE)
 
-### Release
-wip
-[Release](https://github.com/chris19960730/chris19960730.github.io/releases/tag/v1.0)
+## Release
+[Release](https://github.com/chris19960730/stocks-tracker/releases/tag/v1.0)
