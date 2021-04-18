@@ -7,7 +7,7 @@
 
 
 ## Project Objective
-This is a personal stock tracker. It consists of 4 parts: **authentication**(register/login), **stock watchlist**, **friend lists**, and **profile management**. 
+ This is a personal stock tracker. It consists of 4 parts: **authentication**(register/login), **stock watchlist**, **friend lists**, and **profile management**. 
 
 Users can search for stocks by stock symbol ticker, add them to their watchlist, and remove unwanted stocks. They can also search for register users by email and view their profile and stock watchlist. Users can view and update their own profile as well.
 
